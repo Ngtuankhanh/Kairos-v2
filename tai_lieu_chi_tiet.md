@@ -2,6 +2,14 @@
 
 Dự án Kairos-v2
 
+> [!IMPORTANT]
+> **LƯU Ý QUAN TRỌNG VỀ MÃ NGUỒN (CLOSED-SOURCE)**
+> 
+> Tài liệu kỹ thuật này mô tả kiến trúc thiết kế đầy đủ của hệ thống **Kairos v2**. 
+> Tuy nhiên, vì mục đích bảo vệ bản quyền thuật toán và chiến lược thương mại:
+> * Một số module/tệp tin liên quan đến **logic chiến lược Vectorized** và **các module được xây dựng trên nền tảng logic Vectorized** không được công bố mã nguồn công khai trong repository này.
+> * Mã nguồn trong repository này chủ yếu tập trung vào phần cấu trúc ETL pipeline, feature engineering cốt lõi và khung backtest. Các mô tả tính năng nâng cao vẫn được giữ nguyên trong tài liệu này nhằm mục đích thể hiện tư duy thiết kế hệ thống toàn vẹn cho portfolio cá nhân.
+
 ---
 
 ## Mục lục tài liệu chuyên sâu

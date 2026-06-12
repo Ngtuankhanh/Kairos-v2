@@ -13,6 +13,13 @@
 
 </div>
 
+> [!IMPORTANT]
+> **LƯU Ý VỀ PHIÊN BẢN OPEN-SOURCE (PORTFOLIO VERSION)**
+> 
+> Đây là phiên bản rút gọn phục vụ mục đích xây dựng **Portfolio cá nhân**.
+> * **Giữ nguyên tài liệu & thiết kế:** Để người xem có thể đánh giá toàn vẹn kiến trúc hệ thống, tất cả các phần mô tả tính năng, cấu trúc thư mục và tài liệu kỹ thuật vẫn được giữ lại đầy đủ.
+> * **Giới hạn mã nguồn:** Một số chức năng và module liên quan đến **logic chiến lược Vectorized** cùng **các module xây dựng trên nền tảng logic Vectorized** đã được lược bỏ khỏi mã nguồn công khai trong repository này và được giữ **Closed-source** để bảo vệ bản quyền thuật toán.
+
 <div align="left">
  
 -----
@@ -575,7 +582,7 @@ Nghiên cứu chiến lược             Nghiên cứu ML
 
 -----
 
-**Về mã nguồn:** Repository này là nền tảng Proof-of-Concept. Các module nâng cao và phiên bản production được giữ Closed-source.
+**Về mã nguồn:** Repository này là nền tảng Proof-of-Concept phục vụ Portfolio cá nhân. Các phần logic chiến lược Vectorized và các module xây dựng trên nền tảng đó được giữ Closed-source để bảo vệ bản quyền thuật toán.
 
 -----
 
