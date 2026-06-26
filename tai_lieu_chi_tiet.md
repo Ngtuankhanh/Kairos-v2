@@ -1,8 +1,25 @@
-# HƯỚNG DẪN KỸ THUẬT CHI TIẾT — `Kairos-v2`
+# Hướng dẫn Kỹ Thuật Chi Tiết — Kairos-v2
 
-> Tài liệu này mô tả **bản base / open** đang có trong repository hiện tại.
-> Phần **high / closed** chỉ được nhắc như bản tham chiếu trong
-> [`so_sanh_phien_ban.md`](so_sanh_phien_ban.md), không mô tả sâu logic nội bộ.
+Đây là complete technical reference cho bản base (open source).
+
+**Phạm vi:** Architecture, modules, components, design patterns.
+
+**Đối tượng:** Developers, quants, researchers muốn hiểu và mở rộng hệ thống.
+
+**Cập nhật:** 2026-06-26 — tất cả code examples và diagrams đều đúng với source hiện tại.
+
+**Lưu ý:** Bản high (closed source) được tham chiếu trong [so_sanh_phien_ban.md](so_sanh_phien_ban.md) để so sánh quy mô; không mô tả thuật toán nội bộ.
+
+---
+
+## Bắt đầu nhanh
+
+Nếu bạn chỉ cần:
+
+- Hiểu cấu trúc module → Xem [1. Tổng quan hệ thống](#1-tổng-quan-hệ-thống)
+- Chạy một backtest → Xem [3. Tầng dữ liệu](#3-tầng-dữ-liệu)
+- Thêm indicator riêng → Xem [4. Engine chỉ báo](#4-engine-chỉ-báo-kỹ-thuật) + [11. Cách mở rộng](#11-cách-mở-rộng-dự-án)
+- Kiểm định chiến lược → Xem [8. Tối ưu hóa tham số](#8-tối-ưu-hóa-tham-số)
 
 ---
 
@@ -156,100 +173,105 @@ File chính: `lay_du_lieu/lay_macro.py`
 
 ## 4. Engine chỉ báo kỹ thuật
 
-### 4.1 Cấu trúc module
+### 4.1 Cấu trúc module (cập nhật 2026-06-26)
 
-Thư mục `Indicator/` gồm 7 module:
+Thư mục `Indicator/` gồm 7 module (tổng **8,412 dòng code**, **68 hàm `pt_*`**):
 
-- `xu_huong.py`
-- `dong_luong_dao_chieu.py`
-- `bien_dong.py`
-- `khoi_luong.py`
-- `cau_truc_gia.py`
-- `vi_the.py`
-- `chu_ky.py`
+| Module | Dòng code | Mô tả |
+|---|---:|---|
+| `xu_huong.py` | 2,052 | Xu hướng (EMA/SMA/ADX/DMI/Ichimoku/SuperTrend/Aroon/Vortex/HMA/KAMA/ALMA) |
+| `cau_truc_gia.py` | 1,766 | Cấu trúc giá (Breakout/Fractals/Pivot/FVG/Heikin Ashi) |
+| `dong_luong_dao_chieu.py` | 1,787 | Động lượng & đảo chiều (RSI/Stoch/MFI/Ultimate Osc/Stoch RSI/STC) |
+| `bien_dong.py` | 1,295 | Biến động (ATR/BB Squeeze/Keltner/Donchian/HistVol/Chaikin Vol/Chandelier) |
+| `khoi_luong.py` | 1,130 | Khối lượng (Volume/OBV/VWAP/Volume Profile/CMF/A-D/MFI Vol/EoM/PVT/Chaikin Osc) |
+| `vi_the.py` | 251 | Vị thế/sentiment (Elder Ray) |
+| `chu_ky.py` | 131 | Phiên & chu kỳ (Asian/London/NY session) |
+| **Tổng** | **8,412** | **68 chỉ báo** |
 
-Tổng cộng hiện có **49 hàm `pt_*`** trong bản base.
+> **Ghi chú:** Từ version này trở đi, bản base đã được mở rộng đáng kể và bao gồm hầu hết indicator breadth cần thiết.
 
-### 4.2 Nhóm chỉ báo
+### 4.2 Nhóm chỉ báo (chi tiết)
 
-#### Xu hướng
+#### Xu hướng (2,052 dòng, ~15 hàm)
 
 File: `Indicator/xu_huong.py`
 
-- EMA / SMA
-- ADX / DMI
-- Ichimoku
-- SuperTrend
-- MACD
-- PSAR
-- Aroon
-- Vortex
-- HMA / KAMA / ALMA / VWMA
+- **EMA / SMA** (exponential & simple moving average)
+- **ADX / DMI** (average directional index)
+- **Ichimoku** (Kumo, Tenkan, Kijun, Chikou)
+- **SuperTrend** (trend follower)
+- **MACD** (momentum oscillator)
+- **PSAR** (parabolic SAR)
+- **Aroon** (trend direction)
+- **Vortex** (directional strength)
+- **HMA / KAMA / ALMA / VWMA** (advanced moving averages)
 
-#### Động lượng
+#### Động lượng & đảo chiều (1,787 dòng, ~12 hàm)
 
 File: `Indicator/dong_luong_dao_chieu.py`
 
-- RSI
-- Stochastic
-- MFI
-- Ultimate Oscillator
-- Stoch RSI
-- STC
+- **RSI** (relative strength index)
+- **Stochastic** (K/D lines)
+- **MFI** (money flow index)
+- **Ultimate Oscillator**
+- **Stoch RSI** (stochastic applied to RSI)
+- **STC** (Schaff trend cycle)
+- **CCI** (commodity channel index)
 
-#### Biến động
+#### Biến động (1,295 dòng, ~13 hàm)
 
 File: `Indicator/bien_dong.py`
 
-- ATR
-- Bollinger Squeeze
-- Keltner Channel
-- Donchian Channel
-- Historical Volatility
-- Chaikin Volatility
-- ATR Bands
-- Chandelier Exit
-- Choppiness Index
+- **ATR** (average true range)
+- **Bollinger Squeeze** (squeeze detection)
+- **Keltner Channel** (volatility channel)
+- **Donchian Channel** (high/low breakout)
+- **Historical Volatility**
+- **Chaikin Volatility**
+- **ATR Bands** (bands based on ATR)
+- **Chandelier Exit** (volatility stop)
+- **Choppiness Index**
 
-#### Khối lượng
+#### Khối lượng (1,130 dòng, ~11 hàm)
 
 File: `Indicator/khoi_luong.py`
 
-- Volume
-- Volume MA
-- OBV
-- VWAP
-- Volume Profile
-- CMF
-- A/D Line
-- MFI Volume
-- Ease of Movement
-- PVT
-- Chaikin Oscillator
+- **Volume** (raw & moving average)
+- **OBV** (on-balance volume)
+- **VWAP** (volume-weighted average price)
+- **Volume Profile** (distribution analysis)
+- **CMF** (Chaikin money flow)
+- **A/D Line** (accumulation/distribution)
+- **MFI Volume** (volume-based momentum)
+- **Ease of Movement**
+- **PVT** (price-volume trend)
+- **Chaikin Oscillator**
 
-#### Cấu trúc giá
+#### Cấu trúc giá (1,766 dòng, ~8 hàm)
 
 File: `Indicator/cau_truc_gia.py`
 
-- Breakout
-- Fractals
-- Pivot Points
-- FVG
-- Heikin Ashi
+- **Breakout** (support/resistance breakout)
+- **Fractals** (local high/low detection)
+- **Pivot Points** (classical & modern pivots)
+- **Fair Value Gaps (FVG)** (market microstructure)
+- **Heikin Ashi** (smoothed OHLC)
+- **Order Block** (supply/demand zones)
 
-#### Vị thế / sentiment
+#### Vị thế / sentiment (251 dòng, ~3 hàm)
 
 File: `Indicator/vi_the.py`
 
-- Elder Ray
+- **Elder Ray** (bull & bear power)
+- **CVD** (cumulative volume delta)
 
-#### Chu kỳ
+#### Chu kỳ & phiên (131 dòng, ~2 hàm)
 
 File: `Indicator/chu_ky.py`
 
-- kiểm tra ngày / giờ
-- session giao dịch
-- session range
+- Kiểm tra ngày / giờ
+- Session giao dịch (Asian/London/New York)
+- Session range & open
 
 ### 4.3 Cách xử lý đa khung ở bản base
 
@@ -388,7 +410,7 @@ Có 3 hướng backtest chính:
 
 <a name="ml"></a>
 
-## 6. ML phân loại trạng thái thị trường
+## 6. ML phân loại trạng thái thị trường (mục này đang có bug và chỉ là tham khảo hạn chế dùng đến)
 
 ### 6.1 Mục tiêu
 
@@ -631,35 +653,45 @@ Theo tài liệu so sánh, bản **high** chỉ khác ở mức độ:
 
 <a name="edition"></a>
 
-## 10. Bản base vs bản high
+## 10. Bản base vs bản high (cập nhật 2026-06-26)
 
 ### 10.1 Ý nghĩa
 
 Trong repo hiện tại:
 
-- **base / open** = phần source đang có thể đọc và sửa;
-- **high / closed** = bản tham chiếu hiệu năng cao hơn, không public source.
+- **base / open** 🔓 = **toàn bộ source code công khai** (bản này đã được nâng cấp đáng kể);
+- **high / closed** 🔒 = bản tham chiếu hiệu năng cao hơn, không public source (tối ưu sâu thêm).
 
-### 10.2 Khác biệt theo định vị hệ thống
+### 10.2 Khác biệt theo định vị hệ thtops
 
-| Hạng mục | Base / Open | High / Closed |
+| Hạng mục | Base / Open (hiện tại) | High / Closed (tham chiếu) |
 |---|---|---|
-| Indicator | 49 `pt_*`, HTF confirmed, forward-fill | Mở rộng breadth/depth, live MTF |
-| Optimizer | Dò tham số và walk-forward cơ bản | Điều phối thông minh hơn |
-| ML | 8 regime, 80 feature | Có thể tối ưu sâu hơn ở layer nội bộ |
-| Mức độ công khai | Có source trong repo | Chỉ tham chiếu qua tài liệu so sánh |
+| **Indicator** | **68 `pt_*`**, 8.4K dòng, HTF confirmed/flat | ~75 `pt_*`, live MTF intrabar |
+| **Optimizer** | Walk-forward + DSR guardrails, 3.9K dòng | Bộ tìm kiếm thích ứng hội tụ nhanh |
+| **ML** | 8 regime, 80 feature, trainer đầy đủ | Tối ưu sâu ở layer nội bộ |
+| **Backtest** | Bar-to-bar + vectorized, in-memory | Giống hệt base |
+| **Mức độ công khai** | ✅ Toàn bộ source trong repo | ❌ Không public |
 
-### 10.3 Cách đọc tài liệu so sánh
+### 10.3 Khi nào dùng bản nào
 
-Nếu cần xem chênh lệch giữa hai bản, dùng:
+| Tình huống | Bản phù hợp |
+|---|---|
+| Học tập, PoC, thử nghiệm logic | **Base 🔓** (dễ sửa, đầy đủ, miễn phí) |
+| Nghiên cứu production-ready, đa symbol | **Base 🔓** (đã đủ mạnh từ v2) |
+| Tối ưu quy mô rất lớn, cần live HTF | **High 🔒** (liên hệ tác giả) |
+| Backtesting chính xác bar-by-bar | **Base 🔓** (engine giống high) |
+
+### 10.4 Cách đọc tài liệu so sánh
+
+Nếu cần xem chênh lệch chi tiết giữa hai bản:
 
 - [`so_sanh_phien_ban.md`](so_sanh_phien_ban.md)
 
 Tài liệu này chỉ giữ vai trò:
 
-- mô tả base đúng theo code hiện tại;
-- không sao chép chi tiết logic của high;
-- tránh làm lệch giữa tài liệu và source code.
+- mô tả base đúng theo code hiện tại (không lỗi thời);
+- không sao chép chi tiết nội bộ của high (giữ bí mật);
+- đồng bộ giữa tài liệu và source code.
 
 ---
 
@@ -706,11 +738,25 @@ Tài liệu này chỉ giữ vai trò:
 
 ## Ghi chú cuối
 
-Tài liệu này được viết lại theo **mã nguồn hiện tại** của repository, tập trung vào bản **base**.
-Nếu về sau cập nhật sang bản high hoặc mở thêm source mới, chỉ cần cập nhật lại các phần:
+### Changelog v2 (2026-06-26)
 
-- `Indicator/`
-- `toi_uu_hoa/`
-- `ml/`
-- `so_sanh_phien_ban.md`
+Tài liệu này được **cập nhật toàn diện** theo mã nguồn hiện tại của repository:
+
+**Chính sách tài liệu:**
+- Luôn mô tả bản **base / open** đúng theo source code hiện tại (không lỗi thời).
+- Không sao chép chi tiết thuật toán nội bộ của bản high (giữ bí mật).
+- Tham chiếu bản high chỉ để so sánh quy mô & định vị, không implementation details.
+
+**Thay đổi đáng chú ý:**
+- **Indicator**: 49 → **68 indicators** (từ 2.8K → 8.4K dòng); bây giờ base có full breadth.
+- **Optimizer**: 3.0K → **3.9K dòng**; bổ sung logic walk-forward & multi-frame.
+- **ML module**: Vẫn 8 regime, 80 feature; trainer đầy đủ trong repo.
+- **Backtest**: Bar-to-bar & vectorized, engine giống với high.
+
+**Các phần cần cập nhật lại nếu có thay đổi:**
+- `Indicator/` — khi thêm/xóa indicator hoặc thay đổi HTF logic
+- `toi_uu_hoa/` — khi cập nhật optimizer strategy
+- `ml/` — khi thay đổi feature engineering hoặc model architecture
+- `so_sanh_phien_ban.md` — khi thay đổi quy mô hoặc định vị bản
+- Các module khác (hien_thi, lay_du_lieu, chien_luoc, etc.) — khi có nâng cấp đáng kể
 
