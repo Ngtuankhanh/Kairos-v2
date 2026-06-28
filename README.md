@@ -5,6 +5,8 @@
 # KAIROS QUANT SYSTEM
 ### End-to-End Data Analytics Pipeline for Financial Market Research
 
+[![English](https://img.shields.io/badge/Language-English-blue?style=for-the-badge)](README.md) [![Tiếng Việt](https://img.shields.io/badge/Language-Tiếng_Việt-gray?style=for-the-badge)](README_VI.md)
+
 [![Python](https://img.shields.io/badge/Python-3.12+-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![Domain](https://img.shields.io/badge/Domain-FinTech%20%2F%20Crypto-orange?style=for-the-badge)](https://www.binance.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](https://opensource.org/licenses/MIT)
